@@ -1188,33 +1188,34 @@
         <script src="js/designesia.js"></script>
         <script src="js/validation.js"></script>
 
-      
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz_7QD6yDZXEJDBlTA-20poAokNVcHYIFjKzzi5gohm-t6kaZo2wHEK6fPKzml3RL87mw/exec';
-        const form = document.forms['submit-to-google-sheet'];
-        const mailSuccess = document.getElementById('mail_success');
-        const mailFail = document.getElementById('mail_fail');
-
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-                .then(response => {
-                    if (response.ok) {
-                        mailSuccess.style.display = 'block';
-                        mailFail.style.display = 'none';
-                        console.log('Form submitted successfully', response);
-                    } else {
+        <script>
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbz_7QD6yDZXEJDBlTA-20poAokNVcHYIFjKzzi5gohm-t6kaZo2wHEK6fPKzml3RL87mw/exec';
+            const form = document.forms['submit-to-google-sheet'];
+            const mailSuccess = document.getElementById('mail_success');
+            const mailFail = document.getElementById('mail_fail');
+    
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                    .then(response => {
+                        if (response.ok) {
+                            mailSuccess.style.display = 'block';
+                            mailFail.style.display = 'none';
+                            console.log('Form submitted successfully', response);
+                            // Clear form fields
+                            form.reset();
+                        } else {
+                            mailSuccess.style.display = 'none';
+                            mailFail.style.display = 'block';
+                            console.error('Error submitting form', response);
+                        }
+                    })
+                    .catch(error => {
                         mailSuccess.style.display = 'none';
                         mailFail.style.display = 'block';
-                        console.error('Error submitting form', response);
-                    }
-                })
-                .catch(error => {
-                    mailSuccess.style.display = 'none';
-                    mailFail.style.display = 'block';
-                    console.error('Error submitting form', error);
-                });
-        });
-    </script>
+                        console.error('Error submitting form', error);
+                    });
+            });
+        </script>
 
 </body></html>
