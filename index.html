@@ -1071,7 +1071,7 @@
                         </div>
 
                         <div class="col-md-8 mb-md-30">
-                            <form name="contactForm" id="contact_form" class="de_form" method="post" action="email.php">
+                            <form name="submit-to-google-sheet" id="contact_form" class="de_form" >
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="field-set">
@@ -1099,7 +1099,7 @@
 
                                     <div class="col-md-12">
                                         <div id="submit">
-                                            <input type="submit" id="send_message" value="Submit Form" class="btn btn-custom color-2">
+                                            <input type="submit" value="Submit Form" class="btn btn-custom color-2">
                                         </div>
                                         <div id="mail_success" class="success">Your message has been sent successfully.</div>
                                         <div id="mail_fail" class="error">Sorry, error occured this time sending your message.</div>
@@ -1188,6 +1188,33 @@
         <script src="js/designesia.js"></script>
         <script src="js/validation.js"></script>
 
+      
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz_7QD6yDZXEJDBlTA-20poAokNVcHYIFjKzzi5gohm-t6kaZo2wHEK6fPKzml3RL87mw/exec';
+        const form = document.forms['submit-to-google-sheet'];
+        const mailSuccess = document.getElementById('mail_success');
+        const mailFail = document.getElementById('mail_fail');
 
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => {
+                    if (response.ok) {
+                        mailSuccess.style.display = 'block';
+                        mailFail.style.display = 'none';
+                        console.log('Form submitted successfully', response);
+                    } else {
+                        mailSuccess.style.display = 'none';
+                        mailFail.style.display = 'block';
+                        console.error('Error submitting form', response);
+                    }
+                })
+                .catch(error => {
+                    mailSuccess.style.display = 'none';
+                    mailFail.style.display = 'block';
+                    console.error('Error submitting form', error);
+                });
+        });
+    </script>
 
 </body></html>
