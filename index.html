@@ -1071,43 +1071,41 @@
                         </div>
 
                         <div class="col-md-8 mb-md-30">
-                            <form name="submit-to-google-sheet" id="contact_form" class="de_form" >
+                            <form name="submit-to-google-sheet" id="contact_form" class="de_form">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="field-set">
-                                            <input type="text" name="name" id="name" class="form-control" placeholder="Your Name">
-                                            <div class="line-fx"></div>
-                                        </div>
-
-                                        <div class="field-set">
-                                            <input type="text" name="email" id="email" class="form-control" placeholder="Your Email">
-                                            <div class="line-fx"></div>
-                                        </div>
-
-                                        <div class="field-set">
-                                            <input type="text" name="phone" id="phone" class="form-control" placeholder="Your Phone">
-                                            <div class="line-fx"></div>
-                                        </div>
+                                  <div class="col-md-6">
+                                    <div class="field-set">
+                                      <input type="text" name="name" id="name" class="form-control" placeholder="Your Name">
+                                      <div class="line-fx"></div>
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <div class="field-set">
-                                            <textarea name="message" id="message" class="form-control" placeholder="Your Message"></textarea>
-                                            <div class="line-fx"></div>
-                                        </div>
+                            
+                                    <div class="field-set">
+                                      <input type="email" name="email" id="email" class="form-control" placeholder="Your Email">
+                                      <div class="line-fx"></div>
                                     </div>
-
-                                    <div class="col-md-12">
-                                        <div id="submit">
-                                            <input type="submit" value="Submit Form" class="btn btn-custom color-2">
-                                        </div>
-                                        <div id="mail_success" class="success">Your message has been sent successfully.</div>
-                                        <div id="mail_fail" class="error">Sorry, error occured this time sending your message.</div>
+                            
+                                    <div class="field-set">
+                                      <input type="text" name="phone" id="phone" class="form-control" placeholder="Your Phone">
+                                      <div class="line-fx"></div>
                                     </div>
-
-
+                                  </div>
+                            
+                                  <div class="col-md-6">
+                                    <div class="field-set">
+                                      <textarea name="message" id="message" class="form-control" placeholder="Your Message"></textarea>
+                                      <div class="line-fx"></div>
+                                    </div>
+                                  </div>
+                            
+                                  <div class="col-md-12">
+                                    <div id="submit">
+                                      <input type="submit" value="Submit Form" class="btn btn-custom color-2">
+                                    </div>
+                                    <div id="mail_success" class="success">Your message has been sent successfully.</div>
+                                    <div id="mail_fail" class="error">Sorry, an error occurred while sending your message.</div>
+                                  </div>
                                 </div>
-                            </form>
+                              </form>
 
                         </div>
 
@@ -1188,34 +1186,64 @@
         <script src="js/designesia.js"></script>
         <script src="js/validation.js"></script>
 
-        <script>
+
+
+
+
+
+
+        <!-- <script> 
             const scriptURL = 'https://script.google.com/macros/s/AKfycbz_7QD6yDZXEJDBlTA-20poAokNVcHYIFjKzzi5gohm-t6kaZo2wHEK6fPKzml3RL87mw/exec';
             const form = document.forms['submit-to-google-sheet'];
-            const mailSuccess = document.getElementById('mail_success');
-            const mailFail = document.getElementById('mail_fail');
-    
+         
             form.addEventListener('submit', e => {
-                e.preventDefault();
-                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-                    .then(response => {
-                        if (response.ok) {
-                            mailSuccess.style.display = 'block';
-                            mailFail.style.display = 'none';
-                            console.log('Form submitted successfully', response);
-                            // Clear form fields
-                            form.reset();
-                        } else {
-                            mailSuccess.style.display = 'none';
-                            mailFail.style.display = 'block';
-                            console.error('Error submitting form', response);
-                        }
-                    })
-                    .catch(error => {
-                        mailSuccess.style.display = 'none';
-                        mailFail.style.display = 'block';
-                        console.error('Error submitting form', error);
-                    });
+              e.preventDefault()
+              fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => alert("Thank you! your form is submitted successfully." ))
+                .then(() => {  window.location.reload(); })
+                .catch(error => console.error('Error!', error.message))
+            })
+          </script> -->
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbysqoX4fm1jqnDnM921buUtadKarHyOF0tKJBa1cfyu1MZjncs3m_ya8pjQhlx8EOh7xw/exec'; // Replace with your actual script URL
+        const form = document.forms['submit-to-google-sheet'];
+        const mailSuccess = document.getElementById('mail_success');
+        const mailFail = document.getElementById('mail_fail');
+    
+        form.addEventListener('submit', e => {
+          e.preventDefault();
+          const userEmail = document.getElementById('email').value; // Get user's email directly
+          fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+            .then(response => {
+              if (response.ok) {
+                mailSuccess.style.display = 'block';
+                mailFail.style.display = 'none';
+                console.log('Form submitted successfully', response);
+                form.reset();
+                sendUserEmail(userEmail);
+              } else {
+                mailSuccess.style.display = 'none';
+                mailFail.style.display = 'block';
+                console.error('Error submitting form', response);
+              }
+            })
+            .catch(error => {
+              mailSuccess.style.display = 'none';
+              mailFail.style.display = 'block';
+              console.error('Error submitting form', error);
             });
-        </script>
+        });
+    
+        function sendUserEmail(userEmail) {
+          // You can customize the email message sent to the user here
+          // For example:
+          // MailApp.sendEmail(
+          //   userEmail,
+          //   'Contact Form Submission Confirmation',
+          //   'Thank you for contacting us. We will get back to you shortly.'
+          // );
+        }
+      </script>
 
 </body></html>
